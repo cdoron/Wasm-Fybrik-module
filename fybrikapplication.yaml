@@ -1,7 +1,7 @@
 apiVersion: app.fybrik.io/v1alpha1
 kind: FybrikApplication
 metadata:
-  name: hello-world-read-module-test
+  name: wasm-fybrik-module-test
 spec:
   selector:
    workloadSelector:

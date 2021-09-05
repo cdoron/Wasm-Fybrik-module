@@ -50,8 +50,8 @@ spec:
       serviceAccount: both
       containers:
       - name: both
-        image: example_both:latest
-        imagePullPolicy: Never
+        image: ghcr.io/mohammad-nassar10/example_both:latest
+        imagePullPolicy: Always
         ports:
         - containerPort: 12232
         - containerPort: 12233

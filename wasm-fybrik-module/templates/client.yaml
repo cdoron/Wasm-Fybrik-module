@@ -1,55 +1,58 @@
 ##################################################################################################
-# Memory Server
+# Client
 ##################################################################################################
 apiVersion: v1
 kind: Service
 metadata:
-  name: memory
+  name: client
   labels:
-    app: memory
-    service: memory
+    app: client
+    service: client
 spec:
   type: LoadBalancer
   ports:
   - port: 12233
     targetPort: 12233
     name: direct
-    name: memory
+  - port: 12232
+    targetPort: 12232
+    name: client
   selector:
-    app: memory
+    app: client
 ---
 apiVersion: v1
 kind: ServiceAccount
 metadata:
-  name: memory
+  name: client
   labels:
-    account: memory
+    account: client
 ---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: memory-v1
+  name: client-v1
   labels:
-    app: memory
+    app: client
     version: v1
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: memory
+      app: client
       version: v1
   template:
     metadata:
       labels:
-        app: memory
+        app: client
         version: v1
     spec:
-      serviceAccountName: memory
-      serviceAccount: memory
+      serviceAccountName: client
+      serviceAccount: client
       containers:
-      - name: memory
-        image: example_memory:latest
-        imagePullPolicy: Never
+      - name: client
+        image: ghcr.io/mohammad-nassar10/example_client:latest
+        imagePullPolicy: Always
         ports:
+        - containerPort: 12232
         - containerPort: 12233
 ---

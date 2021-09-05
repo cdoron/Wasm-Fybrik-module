@@ -50,8 +50,8 @@ spec:
       serviceAccount: relay
       containers:
       - name: relay
-        image: example_relay:latest
-        imagePullPolicy: Never
+        image: ghcr.io/mohammad-nassar10/example_relay:latest
+        imagePullPolicy: Always
         ports:
         - containerPort: 12232
         - containerPort: 12233
