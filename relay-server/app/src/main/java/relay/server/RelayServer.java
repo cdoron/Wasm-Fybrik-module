@@ -81,6 +81,11 @@ public class RelayServer implements AutoCloseable {
         // Object transformationsObject = conf.get("transformations");
         System.out.println(conf);
         System.out.println(withTransformation);
+        for (int i = 0; i < data.size(); i++) {
+            Map<String, Object> dataset = data.get(i);
+
+            System.out.println("assetId: " + dataset.get("name") + " transformations: " + dataset.get("transformations"));
+        }
         // transform = withTransformation;
         // if (withTransformation) {
         //     List<Map<String, Object>> transformations = (List<Map<String, Object>>) data1.get("transformations");
