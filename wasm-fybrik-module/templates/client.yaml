@@ -51,8 +51,16 @@ spec:
       containers:
       - name: client
         image: ghcr.io/mohammad-nassar10/example_client:latest
-        imagePullPolicy: Always
+        imagePullPolicy: IfNotPresent
         ports:
         - containerPort: 12232
         - containerPort: 12233
+        volumeMounts:
+          - readOnly: true
+            mountPath: /etc/conf
+            name: config
+      volumes:
+      - name: config
+        configMap:
+          name: {{ include "wasm-fybrik-module.fullname" . }}
 ---

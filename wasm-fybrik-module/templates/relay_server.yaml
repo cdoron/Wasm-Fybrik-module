@@ -1,13 +1,13 @@
 ##################################################################################################
-# Both Servers
+# Relay Server
 ##################################################################################################
 apiVersion: v1
 kind: Service
 metadata:
-  name: both
+  name: relay
   labels:
-    app: both
-    service: both
+    app: relay
+    service: relay
 spec:
   type: LoadBalancer
   ports:
@@ -16,43 +16,51 @@ spec:
     name: direct
   - port: 12232
     targetPort: 12232
-    name: both
+    name: relay
   selector:
-    app: both
+    app: relay
 ---
 apiVersion: v1
 kind: ServiceAccount
 metadata:
-  name: both
+  name: relay
   labels:
-    account: both
+    account: relay
 ---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: both-v1
+  name: relay-v1
   labels:
-    app: both
+    app: relay
     version: v1
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: both
+      app: relay
       version: v1
   template:
     metadata:
       labels:
-        app: both
+        app: relay
         version: v1
     spec:
-      serviceAccountName: both
-      serviceAccount: both
+      serviceAccountName: relay
+      serviceAccount: relay
       containers:
-      - name: both
-        image: ghcr.io/mohammad-nassar10/example_both:latest
-        imagePullPolicy: Always
+      - name: relay
+        image: ghcr.io/mohammad-nassar10/relay-flight-server:latest
+        imagePullPolicy: IfNotPresent
         ports:
         - containerPort: 12232
         - containerPort: 12233
+        volumeMounts:
+          - readOnly: true
+            mountPath: /etc/conf
+            name: config
+      volumes:
+      - name: config
+        configMap:
+          name: {{ include "wasm-fybrik-module.fullname" . }}
 ---

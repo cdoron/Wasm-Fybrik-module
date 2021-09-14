@@ -9,7 +9,7 @@ spec:
        app: notebook
      }
   appInfo:
-    purpose: Fraud Detection
+    intent: Fraud Detection
     role: Data Owner
   data:
     - dataSetID: "default/medals-winners"

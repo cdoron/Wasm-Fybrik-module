@@ -49,7 +49,15 @@ spec:
       containers:
       - name: memory
         image: ghcr.io/mohammad-nassar10/example_memory:latest
-        imagePullPolicy: Always
+        imagePullPolicy: IfNotPresent
         ports:
         - containerPort: 12233
+        volumeMounts:
+          - readOnly: true
+            mountPath: /etc/conf
+            name: config
+      volumes:
+      - name: config
+        configMap:
+          name: {{ include "wasm-fybrik-module.fullname" . }}
 ---
