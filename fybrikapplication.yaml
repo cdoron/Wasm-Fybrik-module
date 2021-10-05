@@ -12,7 +12,7 @@ spec:
     intent: Fraud Detection
     role: Data Owner
   data:
-    - dataSetID: "default/medals-winners"
+    - dataSetID: "default/fake.csv"
       requirements:
         interface:
           protocol: s3

@@ -18,18 +18,19 @@ spec:
       actions:
         - id: redact-ID
           level: 2  # column
+          # conf: oci-image
       api:
         endpoint:
           port: 80
           scheme: grpc
-        protocol: arrow
-        dataformat: arrow
+        protocol: s3
+        dataformat: csv
       supportedInterfaces:
         - source:
-            protocol: arrow
-            dataformat: arrow
+            protocol: s3
+            dataformat: csv
   statusIndicators:
-    - kind: hello-world-read-module
+    - kind: wasm-fybrik-module
       successCondition: status.status == SUCCEEDED
       failureCondition: status.status == FAILED
       errorMessage: status.error
