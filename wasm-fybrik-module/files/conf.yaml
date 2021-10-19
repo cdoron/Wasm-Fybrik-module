@@ -4,23 +4,27 @@ transformations:
     wasm_image: "ghcr.io/the-mesh-for-data/alloc-transform:v1"
     configuration:  |
       {
-        "columns": ["name", "age", "address"]
+        "columns": ["age"],
+        "value": 18
       }
   - name: "Redact"
     wasm_image: "ghcr.io/the-mesh-for-data/alloc-transform:v1"
     configuration:  |
       {
-        "columns": ["name", "age", "address"]
+        "filter_columns": ["age"],
+        "value": 18
       }
 data:
 {{- range .Values.read }}
   - format: {{ .source.format }}
     name: {{ .assetID | quote }}
-    {{- if (contains "fake" .assetID | quote) }}
-    path: "{{ .source.connection.s3.endpoint }}"
+    {{- if .source.connection.s3 }}
+    path: "{{ .source.connection.s3.bucket }}/{{ .source.connection.s3.object_key }}"
     connection:
-      type: localfs
-    {{- end }}
+      type: s3
+      s3:
+        endpoint_url: {{if not (contains "://" .source.connection.s3.endpoint)}}https://{{end}}{{ .source.connection.s3.endpoint }}
+    {{- end }}    
     {{- if .transformations }}
     transformations:
     {{- $redactColumns := list -}}

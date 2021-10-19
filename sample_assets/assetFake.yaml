@@ -10,8 +10,8 @@ spec:
     connection:
       type: s3
       s3:
-        endpoint: "fake.csv"
-        bucket: "bucket"
+        endpoint: "https://s3.eu-de.cloud-object-storage.appdomain.cloud"
+        bucket: "fake-csv-bucket"
         objectKey: "fake.csv"
   assetMetadata:
     geography: theshire
