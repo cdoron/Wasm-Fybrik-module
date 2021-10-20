@@ -60,3 +60,18 @@ Create the name of the service account to use
 {{- default "default" .Values.serviceAccount.name }}
 {{- end }}
 {{- end }}
+
+
+{{- define "wasm-fybrik-module-chart.configtemplate" }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "wasm-fybrik-module.fullname" . }}
+data:
+  conf.yaml: |- 
+{{- if .Values.config_override }}
+{{ .Values.config_override  | indent 4}}
+{{- else }}
+{{ tpl ( .Files.Get "files/conf.yaml" ) . | indent 4 }}
+{{- end -}}
+{{- end }}
