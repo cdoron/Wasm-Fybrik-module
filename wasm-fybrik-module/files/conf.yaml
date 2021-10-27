@@ -1,19 +1,9 @@
 {{- if .Values.read -}}
 transformations:
-  - name: "filter_minors"
+  - name: "Filter"
     wasm_image: "ghcr.io/the-mesh-for-data/alloc-transform:v1"
-    configuration:  |
-      {
-        "columns": ["age"],
-        "value": 18
-      }
   - name: "Redact"
     wasm_image: "ghcr.io/the-mesh-for-data/alloc-transform:v1"
-    configuration:  |
-      {
-        "filter_columns": ["age"],
-        "value": 18
-      }
 data:
 {{- range .Values.read }}
   - format: {{ .source.format }}
@@ -25,37 +15,7 @@ data:
       s3:
         endpoint_url: {{if not (contains "://" .source.connection.s3.endpoint)}}https://{{end}}{{ .source.connection.s3.endpoint }}
     {{- end }}    
-    {{- if .transformations }}
-    transformations:
-    {{- $redactColumns := list -}}
-    {{- $removeColumns := list -}}
-    {{- range .transformations -}}
-      {{- if eq .id "redact-ID" -}}
-        {{- $redactColumns = append  $redactColumns .args.column_name -}}
-      {{- end -}}
-      {{- if eq .id "removed-ID" -}}
-        {{- $removeColumns = append  $removeColumns .args.column_name -}}
-      {{- end -}}
-    {{- end -}}
-    {{- if $redactColumns }}
-      - action: "Redact"
-        description: "redacting columns: {{ $redactColumns }}"
-        columns: 
-          {{- range $redactColumns}}
-          - {{ . }}
-          {{- end }}
-        options:
-          redactValue: "XXXXX"
-    {{- end }}
-    {{- if $removeColumns }}
-      - action: "RemoveColumns"
-        description: "removing columns: {{ $removeColumns }}"
-        columns: 
-          {{- range $removeColumns}}
-          - {{ . }}
-          {{- end }}
-    {{- end }}
-    {{- end }}
+    transformations: {{ toJson .transformations }}
 {{- end -}}
 {{- else -}}
 data: []
