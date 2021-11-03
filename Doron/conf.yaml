@@ -1,0 +1,14 @@
+transformations:
+  - name: "Filter"
+    wasm_image: "ghcr.io/the-mesh-for-data/alloc-transform:v1"
+  - name: "Redact"
+    wasm_image: "ghcr.io/the-mesh-for-data/alloc-transform:v1"
+data:
+  - format: csv
+    name: "default/fake.csv"
+    path: "fake-csv-bucket/fake.csv"
+    connection:
+      type: s3
+      s3:
+        endpoint_url: https://s3.eu-de.cloud-object-storage.appdomain.cloud    
+    transformations: [{"Filter":{"column":"age","op":">","value":18},"name":"Filter"}]

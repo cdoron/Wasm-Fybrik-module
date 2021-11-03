@@ -1,0 +1,38 @@
+apiVersion: v1
+data:
+  conf.yaml: "transformations:\n  - name: \"Filter\"\n    wasm_image: \"ghcr.io/the-mesh-for-data/alloc-transform:v1\"\n
+    \ - name: \"Redact\"\n    wasm_image: \"ghcr.io/the-mesh-for-data/alloc-transform:v1\"\ndata:\n
+    \ - format: csv\n    name: \"default/fake.csv\"\n    path: \"fake-csv-bucket/fake.csv\"\n
+    \   connection:\n      type: s3\n      s3:\n        endpoint_url: https://s3.eu-de.cloud-object-storage.appdomain.cloud
+    \   \n    transformations: [{\"Filter\":{\"column\":\"age\",\"op\":\">\",\"value\":18},\"name\":\"Filter\"}]"
+kind: ConfigMap
+metadata:
+  annotations:
+    meta.helm.sh/release-name: wasm-fybrik-module
+    meta.helm.sh/release-namespace: fybrik-blueprints
+  labels:
+    app.kubernetes.io/managed-by: Helm
+  managedFields:
+  - apiVersion: v1
+    fieldsType: FieldsV1
+    fieldsV1:
+      f:data: {}
+      f:metadata:
+        f:annotations:
+          .: {}
+          f:meta.helm.sh/release-name: {}
+          f:meta.helm.sh/release-namespace: {}
+        f:labels:
+          .: {}
+          f:app.kubernetes.io/managed-by: {}
+    manager: Go-http-client
+    operation: Update
+  - apiVersion: v1
+    fieldsType: FieldsV1
+    fieldsV1:
+      f:data:
+        f:conf.yaml: {}
+    manager: kubectl-edit
+    operation: Update
+  name: wasm-fybrik-module-wasm-fybrik-module-chart
+  namespace: fybrik-blueprints

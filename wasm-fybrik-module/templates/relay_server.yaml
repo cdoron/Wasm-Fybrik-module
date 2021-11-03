@@ -55,11 +55,23 @@ spec:
         ports:
         - containerPort: 12232
         - containerPort: 12233
+        env:
+        - name: SECRET_USERNAME
+          valueFrom:
+            secretKeyRef:
+              name: docker-reg-cred
+              key: .dockerconfigjson
         volumeMounts:
           - readOnly: true
             mountPath: /etc/conf
             name: config
+          - readOnly: true
+            mountPath: /etc/secret
+            name: docker-reg-cred-secret
       volumes:
+      - name: docker-reg-cred-secret
+        secret:
+          secretName: docker-reg-cred
       - name: config
         configMap:
           name: {{ include "wasm-fybrik-module.fullname" . }}
